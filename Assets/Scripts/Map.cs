@@ -53,53 +53,72 @@ public class Map : MonoBehaviour
             }
             buildedMap.Add(buildedMapRow);
         }
-        //tmp = Instantiate(PlayerDelivery, new Vector3(StartPoint.x, StartPoint.y, 0), Quaternion.Euler(0, 0, 0)) as GameObject;
+        buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.green;
     }
 
     void Update()
     {
-        for(int i = 0; i < path.Count; i++)
-        {
-            buildedMap[path[i].y][path[i].x].GetComponent<SpriteRenderer>().color = Color.white;
-        }
-        // determine horizontal velocity change based on the horizontal input
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             var newPos = new Vector2Int(path.Last().x, path.Last().y - 1);
-            if(path.Last().y > 0 && !IsWall(newPos))
+            if(path.Count > 1 && newPos == path[path.Count-2]){
+                Debug.Log("Twise");
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
+                path.RemoveAt(path.Count-1);
+            }
+            else if(path.Last().y > 0 && !IsWall(newPos))
             {
                 path.Add(newPos);
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             var newPos = new Vector2Int(path.Last().x, path.Last().y + 1);
-            if (path.Last().y < Columns - 1 && !IsWall(newPos))
+            if(path.Count > 1 && newPos == path[path.Count-2]){
+                Debug.Log("Twise");
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
+                path.RemoveAt(path.Count-1);
+            }
+            else if (path.Last().y < Columns - 1 && !IsWall(newPos))
             {
                 path.Add(newPos);
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             var newPos = new Vector2Int(path.Last().x - 1, path.Last().y);
-            if (path.Last().x > 0 && !IsWall(newPos))
+            if(path.Count > 1 && newPos == path[path.Count-2]){
+                Debug.Log("Twise");
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
+                path.RemoveAt(path.Count-1);
+            }
+            else if (path.Last().x > 0 && !IsWall(newPos))
             {
                 path.Add(newPos);
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             var newPos = new Vector2Int(path.Last().x + 1, path.Last().y);
-            if (path.Last().x < Rows - 1 && !IsWall(newPos))
+            if(path.Count > 1 && newPos == path[path.Count-2]){
+                Debug.Log("Twise");
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
+                path.RemoveAt(path.Count-1);
+            }
+            else if (path.Last().x < Rows - 1 && !IsWall(newPos))
             {
                 path.Add(newPos);
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
     }
 
     private bool IsWall(Vector2Int next)
-    {
-        if(arrMap[next.x][next.y])
+    {// DD: поменяла у и x местами
+        if(arrMap[next.y][next.x])
         {
             return true;
         }
