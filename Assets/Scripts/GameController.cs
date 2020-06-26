@@ -17,7 +17,6 @@ public class GameController : MonoBehaviour
     void Update()
     {
         var state = gameModel.GetState();
-        Debug.Log(state);
         if(state == GameModel.States.PathBuild || state == GameModel.States.PathGo)
         {
             var time = gameModel.count(Mathf.FloorToInt(Time.deltaTime * 1000));
