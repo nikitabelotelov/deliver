@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6050595300684428518}
   - component: {fileID: -2645483597954561194}
   m_Layer: 0
-  m_Name: CoinIdle_1
+  m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6050595300684428521}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.92, y: -1.09, z: 1.5581145}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd040cb003c2f24da37711269e658d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 0.5
+  Speed: 2
   exitAfterSeconds: 20
 --- !u!61 &-2645483597954561194
 BoxCollider2D:

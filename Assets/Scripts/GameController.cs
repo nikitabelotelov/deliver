@@ -7,15 +7,25 @@ using UnityEngine.Events;
 public class GameController : MonoBehaviour
 {
     public Text timerText;
-    private UnityAction endGame;
     public GameObject endGameUI;
+    public Text collectedCoinsTextField;
+    public Text totalCoinsTextField;
+    public GameObject paralaxBack;
+    public GameObject map;
+    public SpawnBonuses bonusSpawner;
+    private UnityAction endGame;
     private GameModel gameModel;
+    private int collectedCoins;
+    private int totalCoins;
     // Start is called before the first frame update
     void Start()
     {
+        bonusSpawner.enabled = false;
+        collectedCoins = 0;
         endGame += endGameHandler;
         endGameUI.SetActive(false);
-        gameModel = new GameModel(5000);
+        paralaxBack.SetActive(false);
+        gameModel = new GameModel(15000);
         gameModel.setEndGameAction(endGame);
     }
 
@@ -41,6 +51,9 @@ public class GameController : MonoBehaviour
     {
         if(gameModel.GetState() == GameModel.States.PathGo) {
             gameModel.NewOrder();
+            paralaxBack.SetActive(false);
+            bonusSpawner.enabled = false;
+            map.SetActive(true);
         }
     }
 
@@ -49,11 +62,21 @@ public class GameController : MonoBehaviour
         if (gameModel.GetState() == GameModel.States.PathBuild)
         {
             gameModel.StartPathGo();
+            bonusSpawner.enabled = true;
+            paralaxBack.SetActive(true);
+            map.SetActive(false);
         }
+    }
+
+    public void Coin()
+    {
+        collectedCoins++;
     }
 
     public void endGameHandler()
     {
         endGameUI.SetActive(true);
+        bonusSpawner.enabled = false;
+        collectedCoinsTextField.text = "Collected coins: " + collectedCoins.ToString();
     }
 }

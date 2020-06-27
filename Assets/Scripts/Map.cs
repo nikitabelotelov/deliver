@@ -44,7 +44,7 @@ public class Map : MonoBehaviour
             {
                 x = column * CellWidth - (CellWidth * Columns / 2);
                 z = (Rows - 1 - row) * CellHeight - (CellHeight * Rows / 2);
-                tmp = Instantiate(Road, new Vector3(x, z, 0), Quaternion.Euler(0, 0, 0)) as GameObject;
+                tmp = Instantiate(Road, new Vector3(x, z, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
                 if (arrMap[row][column])
                     tmp.GetComponent<SpriteRenderer>().color = Color.red;
                 else
@@ -137,7 +137,6 @@ public class Map : MonoBehaviour
             }
             res.Add(row);
         }
-        Debug.Log("ROWS: " + Rows);
         return res;
     }
 
