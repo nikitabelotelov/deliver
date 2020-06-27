@@ -8,9 +8,10 @@ public class GameModel : ScriptableObject
     private int timeBonus = 10000;
     private UnityAction endGame;
 
-    public GameModel(int initTimer)
+    public void newGame(int initTimer)
     {
-        SetTimer(initTimer);
+        gameTimer = initTimer;
+        state = States.PathBuild;
     }
 
     public enum States
@@ -22,12 +23,6 @@ public class GameModel : ScriptableObject
 
     private static States state = States.PathBuild;
     private static int gameTimer;
-
-    // 2000ms == 2 seconds
-    private static void SetTimer(int initialTimer)
-    {
-        gameTimer = initialTimer;
-    }
 
     public void StartPathBuild()
     {

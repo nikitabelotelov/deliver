@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Events;
 
 public class Map : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class Map : MonoBehaviour
     //public bool[,] Map = new bool[Rows, Columns];
     public Vector2Int StartPoint = new Vector2Int(0, 0);
     public Vector2Int[] CheckPoint;
+    public Text pathTextField;
 
     private List<List<bool>> arrMap;
     private List<List<GameObject>> buildedMap;
@@ -26,6 +29,7 @@ public class Map : MonoBehaviour
 
     private float cellSize = 0.3f;
 
+    public UnityAction<List<Vector2Int>> pathBuildAction;
     void Start()
     {
         arrMap = generateMap();
@@ -53,7 +57,15 @@ public class Map : MonoBehaviour
             }
             buildedMap.Add(buildedMapRow);
         }
-        buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.green;
+        buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.blue;
+        SetPoints(buildedMap);
+    }
+
+    private void SetPoints(List<List<GameObject>> buildedMap)
+    {
+        buildedMap[3][1].GetComponent<SpriteRenderer>().color = Color.green;
+        buildedMap[6][3].GetComponent<SpriteRenderer>().color = Color.green;
+        buildedMap[4][7].GetComponent<SpriteRenderer>().color = Color.green;
     }
 
     void Update()
@@ -95,7 +107,13 @@ public class Map : MonoBehaviour
                 path.Add(newPos);
                 buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
             }
+            pathTextField.text = "Path: " + path.Count;
         }
+    }
+
+    public void SetPathGoAction(UnityAction<List<Vector2Int>> action)
+    {
+        pathBuildAction += action;
     }
 
     private bool isBackwardStep(Vector2Int next)

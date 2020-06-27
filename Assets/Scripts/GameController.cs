@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     public GameObject paralaxBack;
     public GameObject map;
     public SpawnBonuses bonusSpawner;
+    public GameObject pathAnimation;
+    private GameObject pathAnimationInstance;
     private UnityAction endGame;
     private GameModel gameModel;
     private int collectedCoins;
@@ -27,8 +29,9 @@ public class GameController : MonoBehaviour
         endGame += endGameHandler;
         endGameUI.SetActive(false);
         paralaxBack.SetActive(false);
-        gameModel = new GameModel(15000);
+        gameModel = new GameModel();
         gameModel.setEndGameAction(endGame);
+        gameModel.newGame(15000);
     }
 
     // Update is called once per frame
@@ -67,6 +70,8 @@ public class GameController : MonoBehaviour
             bonusSpawner.enabled = true;
             paralaxBack.SetActive(true);
             map.SetActive(false);
+            pathAnimationInstance = Instantiate(pathAnimation, transform.position, Quaternion.Euler(0, 0, 0)) as GameObject;
+            pathAnimationInstance.GetComponent<PathGo>().SetPath(map.GetComponent<Map>().path);
         }
     }
 
@@ -85,5 +90,12 @@ public class GameController : MonoBehaviour
     public void SetBicycle()
     {
         vehicleTextField.text = "Bycicle";
+    }
+
+    public void newGame()
+    {
+        gameModel.newGame(15000);
+        endGameUI.SetActive(false);
+        map.SetActive(true);
     }
 }
