@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public GameObject endGameUI;
     public Text collectedCoinsTextField;
     public Text totalCoinsTextField;
+    public Text vehicleTextField;
     public GameObject paralaxBack;
     public GameObject map;
     public SpawnBonuses bonusSpawner;
@@ -22,6 +23,7 @@ public class GameController : MonoBehaviour
     {
         bonusSpawner.enabled = false;
         collectedCoins = 0;
+        vehicleTextField.text = "Kick scooter";
         endGame += endGameHandler;
         endGameUI.SetActive(false);
         paralaxBack.SetActive(false);
@@ -78,5 +80,10 @@ public class GameController : MonoBehaviour
         endGameUI.SetActive(true);
         bonusSpawner.enabled = false;
         collectedCoinsTextField.text = "Collected coins: " + collectedCoins.ToString();
+    }
+
+    public void SetBicycle()
+    {
+        vehicleTextField.text = "Bycicle";
     }
 }
