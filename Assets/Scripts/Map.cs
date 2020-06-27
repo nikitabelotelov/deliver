@@ -84,8 +84,11 @@ public class Map : MonoBehaviour
         {
             if (isBackwardStep(newPos))
             {
+                Vector2Int a = new Vector2Int(path.Last().x, path.Last().y);
                 buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
                 path.RemoveAt(path.Count - 1);
+                if(path.Contains(a))
+                    buildedMap[a.y][a.x].GetComponent<SpriteRenderer>().color = Color.white;
             }
             else if (canGo(newPos))
             {
