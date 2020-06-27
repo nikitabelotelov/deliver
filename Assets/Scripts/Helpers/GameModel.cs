@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEditor;
 
 public class GameModel : ScriptableObject
 {
     private int buildModeMultiplier = 3;
     private int timeBonus = 10000;
+    private UnityAction endGame;
 
     public GameModel(int initTimer)
     {
@@ -51,6 +53,7 @@ public class GameModel : ScriptableObject
         if (gameTimer <= 0)
         {
             state = States.GameOver;
+            endGame();
         }
         if (state == States.PathBuild)
         {
@@ -67,5 +70,10 @@ public class GameModel : ScriptableObject
     {
         state = States.PathBuild;
         gameTimer += timeBonus;
+    }
+
+    public void setEndGameAction(UnityAction action)
+    {
+        endGame += action;
     }
 }

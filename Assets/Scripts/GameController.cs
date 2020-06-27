@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
     public Text timerText;
+    private UnityAction endGame;
+    public GameObject endGameUI;
     private GameModel gameModel;
     // Start is called before the first frame update
     void Start()
     {
-        gameModel = new GameModel(15000);
+        endGame += endGameHandler;
+        endGameUI.SetActive(false);
+        gameModel = new GameModel(5000);
+        gameModel.setEndGameAction(endGame);
     }
 
     // Update is called once per frame
@@ -21,9 +27,6 @@ public class GameController : MonoBehaviour
         {
             var time = gameModel.count(Mathf.FloorToInt(Time.deltaTime * 1000));
             timerText.text = FormateTime(time);
-        } else if(state == GameModel.States.GameOver)
-        {
-            // TODO
         }
     }
 
@@ -47,5 +50,10 @@ public class GameController : MonoBehaviour
         {
             gameModel.StartPathGo();
         }
+    }
+
+    public void endGameHandler()
+    {
+        endGameUI.SetActive(true);
     }
 }
