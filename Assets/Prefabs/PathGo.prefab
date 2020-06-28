@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 6480929093577735638, guid: 57f5b43c021df714b82e4690d508bc22, type: 3}
-  cellSize: 0.5
-  cellSpeed: 1
+  cellSize: 0.34
+  cellSpeed: 2

@@ -10,8 +10,8 @@ public class Map : MonoBehaviour
 {
     public int Columns = 6;
     public int Rows = 6;
-    public float CellWidth = 1;
-    public float CellHeight = 1;
+    public float CellWidth = 0.5f;
+    public float CellHeight = 0.5f;
     //public bool[,] Map = new bool[Rows, Columns];
     public Vector2Int StartPoint = new Vector2Int(0, 0);
     public Vector2Int[] CheckPoint;
@@ -20,14 +20,14 @@ public class Map : MonoBehaviour
     private List<List<bool>> arrMap;
     private List<List<GameObject>> buildedMap;
     public List<Vector2Int> path;
+    public List<Vector2Int> points;
 
     public GameObject Road = null;
+    public GameObject Wall = null;
+    public GameObject Point = null;
+    public GameObject StartPointPrefab = null;
     public GameObject PlayerDelivery = null;
-
-    float _vx;
-    float _vy;
-
-    private float cellSize = 0.3f;
+    public Vector3 StartPointCoords;
 
     public UnityAction<List<Vector2Int>> pathBuildAction;
     void Start()
@@ -37,8 +37,9 @@ public class Map : MonoBehaviour
         path.Add(StartPoint);
         GameObject tmp;
         float x;
-        float z;
+        float y;
 
+        SetPoints();
         buildedMap = new List<List<GameObject>>(Rows);
 
         for (int row = 0; row < arrMap.Count; row++)
@@ -46,26 +47,39 @@ public class Map : MonoBehaviour
             List<GameObject> buildedMapRow = new List<GameObject>(Rows);
             for (int column = 0; column < arrMap[row].Count; column++)
             {
-                x = column * CellWidth - (CellWidth * Columns / 2);
-                z = (Rows - 1 - row) * CellHeight - (CellHeight * Rows / 2);
-                tmp = Instantiate(Road, new Vector3(x, z, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
+                x = (column * CellWidth + this.transform.position.x) * this.transform.localScale.x;
+                y = ((Rows - 1 - row) * CellHeight + this.transform.position.y) * this.transform.localScale.y;
                 if (arrMap[row][column])
-                    tmp.GetComponent<SpriteRenderer>().color = Color.red;
+                {
+                    tmp = Instantiate(Wall, new Vector3(x, y, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
+                }
                 else
-                    tmp.GetComponent<SpriteRenderer>().color = Color.yellow;
+                {
+                    if (points.IndexOf(new Vector2Int(column, row)) != -1)
+                    {
+                        tmp = Instantiate(Point, new Vector3(x, y, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
+                    }
+                    else if(column == StartPoint.x && row == StartPoint.y)
+                    {
+                        tmp = Instantiate(StartPointPrefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
+                        StartPointCoords = new Vector3(x, y, 0);
+                    }
+                    else 
+                    {
+                        tmp = Instantiate(Road, new Vector3(x, y, 0), Quaternion.Euler(0, 0, 0), this.transform) as GameObject;
+                    }
+                }
                 buildedMapRow.Add(tmp);
             }
             buildedMap.Add(buildedMapRow);
         }
-        buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.blue;
-        SetPoints(buildedMap);
     }
 
-    private void SetPoints(List<List<GameObject>> buildedMap)
+    private void SetPoints()
     {
-        buildedMap[3][1].GetComponent<SpriteRenderer>().color = Color.green;
-        buildedMap[6][3].GetComponent<SpriteRenderer>().color = Color.green;
-        buildedMap[4][7].GetComponent<SpriteRenderer>().color = Color.green;
+        points.Add(new Vector2Int(3, 1));
+        points.Add(new Vector2Int(6, 3));
+        points.Add(new Vector2Int(4, 7));
     }
 
     void Update()
@@ -97,15 +111,15 @@ public class Map : MonoBehaviour
             if (isBackwardStep(newPos))
             {
                 Vector2Int a = new Vector2Int(path.Last().x, path.Last().y);
-                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.yellow;
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
                 path.RemoveAt(path.Count - 1);
-                if(path.Contains(a))
+                if (path.Contains(a))
                     buildedMap[a.y][a.x].GetComponent<SpriteRenderer>().color = Color.white;
             }
             else if (canGo(newPos))
             {
                 path.Add(newPos);
-                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = Color.white;
+                buildedMap[path.Last().y][path.Last().x].GetComponent<SpriteRenderer>().color = new Color(144f / 255, 238f / 255, 144f / 255);
             }
             pathTextField.text = "Path: " + path.Count;
         }
